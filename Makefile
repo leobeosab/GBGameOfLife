@@ -18,7 +18,7 @@ FIX_FLAGS := -v -p 0
 all: $(ROM_NAME)
 
 $(ROM_NAME): $(OBJ_FILES)
-	$(LINK) -o $(BUILDDIR)\$@.gb -n $(SYMDIR)\$@.sym $(OBJ_FILES)
+	$(LINK) -o $(BUILDDIR)/$@.gb -n $(SYMDIR)\$@.sym $(OBJ_FILES)
 	$(FIX) $(FIX_FLAGS) $(BUILDDIR)\$@.gb
 
 $(OBJDIR)/%.o : src/%.asm

@@ -30,3 +30,11 @@ BUTTON_A                EQU    $0
 BUTTON_B                EQU    $1
 BUTTON_SELECT           EQU    $2
 BUTTON_START            EQU    $3
+
+; My Stuff
+BITSHIFT_TRACKER        EQU    $C800
+CELL_ACCUMULATOR        EQU    $C825
+ROW_ACCUMULATOR         EQU    $C850
+COL_ACCUMULATOR         EQU    $C851
+CELL_GRID_START         EQU    $C900
+
