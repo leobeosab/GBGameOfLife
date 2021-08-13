@@ -26,7 +26,7 @@ Start:
 
 ; Load smiley into VRAM
 .loadSmiley
-  ld hl, $9000 + $F
+  ld hl, $9000 + 16
   ld de, SmileyDemo
   ld b, 16
 
@@ -71,19 +71,19 @@ Start:
       ld hl, CELL_ACCUMULATOR
       inc [hl]
 
-      ; Increment Tile Offset
-      inc de
 
       ; Comparison time
       ld a, [BITSHIFT_TRACKER]
       and b
-      ;jp z, .setColumn
-      call drawSmiley
+      call drawCell
+
+      ; Increment Tile Offset
+      inc de
 
       ; Update the cell Accumulator
       ld a, [BITSHIFT_TRACKER]
       sub a, 128
-      ;jp nz, .setColumn
+      jp nz, .setColumn
 
     ; Increment row accumulator
     ld hl, ROW_ACCUMULATOR
@@ -98,8 +98,8 @@ Start:
     ; Check if row accumulator is at 16
     ld hl, ROW_ACCUMULATOR
     ld a, [hl]
-    sub a, 1
-    ;jp nz, .setRow
+    sub a, 16
+    jp nz, .setRow
 
 .displayRegisters
     ld a, %11100100

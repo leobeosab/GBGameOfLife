@@ -15,11 +15,11 @@ ld bc, FontTilesEnd - FontTiles
     jr nz, .copyFont
 ret
 
-drawSmiley::
-  ld de, $10
+drawCell::
   ld hl, VRAM_MAP_CHR
   add hl, de
   ld [hl], 1
+ret
 
 showString::
 .copyString
