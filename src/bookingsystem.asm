@@ -55,35 +55,53 @@ Start:
     ld hl, COL_ACCUMULATOR
     ld [hl], 0
 
-    ld a, 0
-    ld [BITSHIFT_TRACKER], a
-    .setColumn
-      ld hl, BITSHIFT_TRACKER
-      rl [hl]
+    ld hl, ROW_HALF
+    ld [hl], 1
 
-      ; Get current cell and save to register b
-      ld bc, CELL_ACCUMULATOR
-      ld hl, CELL_GRID_START
-      add hl, bc
-      ld b, [hl]
+    .setRowHalf
+      ld a, 1
+      ld [BITSHIFT_TRACKER], a
+
+      .setColumn
+        ; Get current cell and save to register b
+        ld bc, CELL_ACCUMULATOR
+        ld hl, CELL_GRID_START
+        add hl, bc
+        ld b, [hl]
+
+        ; Increment Cell Accumulator
+        ld hl, CELL_ACCUMULATOR
+        inc [hl]
+
+
+        ; Comparison time
+        ld a, [BITSHIFT_TRACKER]
+        and a, b
+        call drawCell
+
+        ; Increment Tile Offset
+        inc de
+
+        ; Update the cell Accumulator
+        ld a, [BITSHIFT_TRACKER]
+        rl a
+        ld [BITSHIFT_TRACKER], a
+        add a, 0 ; If we rotate through all of the bits the result will be all 0s so if we add 0 and check if the 0 flag is set then we know we are done
+        jp nz, .setColumn
+
+      ; End Set Column -----------------------------------
 
       ; Increment Cell Accumulator
       ld hl, CELL_ACCUMULATOR
       inc [hl]
+      
+      ld a, [ROW_HALF]
+      rl a
+      ld [ROW_HALF], a
+      and a, %00000100
+      jp z, .setRowHalf
+    ; End Set Row Half -----------------------------------
 
-
-      ; Comparison time
-      ld a, [BITSHIFT_TRACKER]
-      and b
-      call drawCell
-
-      ; Increment Tile Offset
-      inc de
-
-      ; Update the cell Accumulator
-      ld a, [BITSHIFT_TRACKER]
-      sub a, 128
-      jp nz, .setColumn
 
     ; Increment row accumulator
     ld hl, ROW_ACCUMULATOR
@@ -94,12 +112,25 @@ Start:
     inc de
     inc de
     inc de
+    inc de
+    inc de
+    inc de
+    inc de
+    inc de
+    inc de
+    inc de
+    inc de
+    inc de
+    inc de
+    inc de
+    inc de
 
     ; Check if row accumulator is at 16
     ld hl, ROW_ACCUMULATOR
     ld a, [hl]
     sub a, 16
     jp nz, .setRow
+  ; End Set Row -----------------------------------
 
 .displayRegisters
     ld a, %11100100

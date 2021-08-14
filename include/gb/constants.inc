@@ -35,6 +35,7 @@ BUTTON_START            EQU    $3
 BITSHIFT_TRACKER        EQU    $C800
 CELL_ACCUMULATOR        EQU    $C825
 ROW_ACCUMULATOR         EQU    $C850
+ROW_HALF                EQU    $C851
 COL_ACCUMULATOR         EQU    $C851
 CELL_GRID_START         EQU    $C900
 
