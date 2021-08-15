@@ -30,6 +30,23 @@ showString::
     jr nz, .copyString
 ret
 
+memCopy::
+  ; hl start address
+  ; ld start data address
+  ; b datasize
+  .copyloop
+    ld a, [de]
+    inc de
+    ld [hli], a
+    dec b
+    jp nz, .copyloop
+ret
+
+haltProgram::
+  halt
+ret
+
+
 SECTION "Font", ROM0
 FontTiles:
 INCBIN "assets/font.chr"

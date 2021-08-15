@@ -30,17 +30,14 @@ Start:
   ld de, SmileyDemo
   ld b, 16
 
-.copyloop
-  ld a, [de]
-  inc de
-  ld [hli], a
-  dec b
-  jp nz, .copyloop
+  call memCopy
 
 .setupCellGrid
   ; Load in Cell grid to cell grid constant
   ld hl, CELL_GRID_START
   ld de, CellGrid
+  ld b, 36
+  call memCopy
 
   ld hl, CELL_ACCUMULATOR
   ld [hl], 0 ; Cell Accumulator
@@ -59,36 +56,33 @@ Start:
     ld [hl], 1
 
     .setRowHalf
-      ld a, 1
+      ld a, 128
       ld [BITSHIFT_TRACKER], a
 
       .setColumn
         ; Get current cell and save to register b
-        ld bc, CELL_ACCUMULATOR
         ld hl, CELL_GRID_START
+        ld a, [CELL_ACCUMULATOR]
+        ld b, 0
+        ld c, a
         add hl, bc
+
         ld b, [hl]
-
-        ; Increment Cell Accumulator
-        ld hl, CELL_ACCUMULATOR
-        inc [hl]
-
 
         ; Comparison time
         ld a, [BITSHIFT_TRACKER]
         and a, b
-        call drawCell
+        call nz, drawCell
 
         ; Increment Tile Offset
         inc de
 
         ; Update the cell Accumulator
         ld a, [BITSHIFT_TRACKER]
-        rl a
+        rr a
         ld [BITSHIFT_TRACKER], a
         add a, 0 ; If we rotate through all of the bits the result will be all 0s so if we add 0 and check if the 0 flag is set then we know we are done
         jp nz, .setColumn
-
       ; End Set Column -----------------------------------
 
       ; Increment Cell Accumulator
@@ -108,22 +102,12 @@ Start:
     inc [hl]
 
     ; Increment Tile Offset at the end of the row
-    inc de
-    inc de
-    inc de
-    inc de
-    inc de
-    inc de
-    inc de
-    inc de
-    inc de
-    inc de
-    inc de
-    inc de
-    inc de
-    inc de
-    inc de
-    inc de
+    ld a, 0
+    .tileOffset
+      inc a
+      inc de
+      cp a, 16
+      jp nz, .tileOffset
 
     ; Check if row accumulator is at 16
     ld hl, ROW_ACCUMULATOR
@@ -156,18 +140,18 @@ GameTitle:
 SmileyDemo:
   db $00, $00, $00, $00, $24, $24, $00, $00, $81, $81, $7e, $7e, $00, $00, $00, $00
 CellGrid:
-  db %00001001, %00000000
-  db %00001000, %00000000
-  db %00001000, %00000000
+  db %11111111, %11111111
+  db %11111111, %00000001
   db %00000000, %00000000
   db %00000000, %00000000
   db %00000000, %00000000
   db %00000000, %00000000
   db %00000000, %00000000
+  db %00000000, %00100000
   db %00000000, %00000000
   db %00000000, %00000000
   db %00000000, %00000000
-  db %00000000, %00000000
+  db %00000000, %00010000
   db %00000000, %00000000
   db %00000000, %00000000
   db %00000000, %00000000
