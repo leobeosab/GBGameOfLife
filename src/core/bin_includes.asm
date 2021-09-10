@@ -15,10 +15,18 @@ ld bc, FontTilesEnd - FontTiles
     jr nz, .copyFont
 ret
 
+; a - 0 or 1 1 being alive, 0 being dead
+; inc a because the tile index is setup with 1 being dead, 2 being alive
 drawCell::
   ld hl, VRAM_MAP_CHR
   add hl, de
+  jp nz, .drawLive
+  .drawDead
   ld [hl], 1
+  jp .drawCellEnd
+  .drawLive
+  ld [hl], 2
+  .drawCellEnd
 ret
 
 showString::

@@ -25,11 +25,15 @@ Start:
   call showString
 
 ; Load smiley into VRAM
-.loadSmiley
+.loadCells
   ld hl, $9000 + 16
+  ld de, DeadCell
+  ld b, 16
+  call memCopy
+
+  ld hl, $9000 + 32
   ld de, LiveCell
   ld b, 16
-
   call memCopy
 
 call loadStartingGrid
@@ -62,8 +66,8 @@ LiveCell:
   DB $00, $ff, $3c, $c3, $42, $bd, $5a, $a5
   DB $5a, $a5, $42, $bd, $3c, $c3, $00, $ff
 DeadCell:
-  DB $ff, $ff, $ff, $ff, $ff, $ff, $ff, $ff
-  DB $ff, $ff, $ff, $ff, $ff, $ff, $ff, $ff
+  DB $00, $ff, $3c, $ff, $42, $ff, $5a, $ff
+  DB $5a, $ff, $42, $ff, $3c, $ff, $00, $ff
 Wall:
   DB $00, $ff, $7e, $ff, $42, $ff, $4a, $ff
   DB $7a, $ff, $02, $ff, $fe, $ff, $00, $ff

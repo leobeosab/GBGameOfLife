@@ -44,7 +44,7 @@ loadStartingGrid::
             ; Comparison time
             ld a, [BITSHIFT_TRACKER]
             and a, b
-            call nz, drawCell
+            call drawCell
 
             ; Increment Tile Offset
             inc de
