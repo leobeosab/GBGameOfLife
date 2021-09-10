@@ -6,8 +6,8 @@ FIX = rgbfix
 
 INCDIR = include
 BUILDDIR = build
-SYMDIR = $(BUILDDIR)\sym
-OBJDIR = $(BUILDDIR)\obj
+SYMDIR = $(BUILDDIR)/sym
+OBJDIR = $(BUILDDIR)/obj
 
 #Change the following lines
 ROM_NAME = game-of-life
@@ -18,13 +18,13 @@ FIX_FLAGS := -v -p 0
 all: $(ROM_NAME)
 
 $(ROM_NAME): $(OBJ_FILES)
-	$(LINK) -o $(BUILDDIR)/$@.gb -n $(SYMDIR)\$@.sym $(OBJ_FILES)
-	$(FIX) $(FIX_FLAGS) $(BUILDDIR)\$@.gb
+	$(LINK) -o $(BUILDDIR)/$@.gb -n $(SYMDIR)/$@.sym $(OBJ_FILES)
+	$(FIX) $(FIX_FLAGS) $(BUILDDIR)/$@.gb
 
 $(OBJDIR)/%.o : src/%.asm
 	$(ASM) -i $(INCDIR)/ -o $@ $<
 
 clean:
-	del $(BUILDDIR)\$(ROM_NAME).gb $(SYMDIR)\$(ROM_NAME).sym $(OBJECTS)
+	del $(BUILDDIR)/$(ROM_NAME).gb $(SYMDIR)/$(ROM_NAME).sym $(OBJECTS)
 
 print-%  : ; @echo $* = $($*)
