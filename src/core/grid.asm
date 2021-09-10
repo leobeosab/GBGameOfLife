@@ -14,7 +14,8 @@ loadStartingGrid::
     ld [hl], 0 ; Cell Accumulator
 
     ; tile offset
-    ld de, 0
+    ; This decideds the spacing from the left side of the screen
+    ld de, 2
 
     ld hl, ROW_ACCUMULATOR
     ld [hl], 0

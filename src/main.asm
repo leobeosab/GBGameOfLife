@@ -27,7 +27,7 @@ Start:
 ; Load smiley into VRAM
 .loadSmiley
   ld hl, $9000 + 16
-  ld de, SmileyDemo
+  ld de, LiveCell
   ld b, 16
 
   call memCopy
@@ -56,4 +56,14 @@ Section "String Storage", ROM0
 GameTitle:
   db "Game of life", 0
 SmileyDemo:
-  db $00, $00, $00, $00, $24, $24, $00, $00, $81, $81, $7e, $7e, $00, $00, $00, $00
+  DB $ff, $ff, $81, $ff, $bd, $ff, $bd, $e7
+  DB $bd, $e7, $bd, $ff, $81, $ff, $ff, $ff
+LiveCell:
+  DB $00, $ff, $3c, $c3, $42, $bd, $5a, $a5
+  DB $5a, $a5, $42, $bd, $3c, $c3, $00, $ff
+DeadCell:
+  DB $ff, $ff, $ff, $ff, $ff, $ff, $ff, $ff
+  DB $ff, $ff, $ff, $ff, $ff, $ff, $ff, $ff
+Wall:
+  DB $00, $ff, $7e, $ff, $42, $ff, $4a, $ff
+  DB $7a, $ff, $02, $ff, $fe, $ff, $00, $ff
