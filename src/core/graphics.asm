@@ -9,7 +9,7 @@ copyFont::
     call memCopy
 ret
 
-; Load smiley into VRAM
+; Load cells and wall into VRAM
 loadCells::
     ld hl, $9000 + 16
     ld de, DeadCell
@@ -18,6 +18,11 @@ loadCells::
 
     ld hl, $9000 + 32
     ld de, LiveCell
+    ld bc, 16
+    call memCopy
+
+    ld hl, $9000 + 48
+    ld de, Wall
     ld bc, 16
     call memCopy
 ret

@@ -23,6 +23,7 @@ Start:
   ld de, GameTitle
   call showString
 
+call drawWalls
 call loadStartingGrid
 
 .displayRegisters
@@ -42,4 +43,4 @@ ret
 
 Section "String Storage", ROM0
 GameTitle:
-  db "Game of life", 0
+  db "    Game of life    ", 0

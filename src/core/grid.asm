@@ -2,7 +2,49 @@ INCLUDE "gb/constants.inc"
 
 SECTION "grid_setup", ROM0
 
+drawWalls::
+    ; hl - Background Tile Start position
+    ; c - Increment amount
+    ; b - Tile count
+    .wallLoop
+    ; Create wall
+    ld [hl], 3
+    ; Temporary Storage for b
+    ld a, b
+    ld b, 0
+
+    ; Increase HL to next wall position
+    add hl, bc
+
+    ; Swap b back in for a
+    ld b, a
+
+    ; Decrease wall counter
+    dec b
+    ld a, b
+
+    ; Jump if the wall counter is not at 0
+    jp nz, .wallLoop
+ret
+
 loadStartingGrid::
+    ; Setup the walls
+    ; left wall
+    ld hl, $9801
+    ld c, $20
+    ld b, 16  
+    call drawWalls
+    ; middle bottom wall
+    ld hl, $9a01
+    ld c, $1
+    ld b, 18
+    call drawWalls
+    ; right wall
+    ld hl, $9812
+    ld c, $20
+    ld b, 16  
+    call drawWalls
+
     .setupCellGrid
     ; Load in Cell grid to cell grid constant
     ld hl, CELL_GRID_START
