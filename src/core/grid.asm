@@ -7,7 +7,7 @@ loadStartingGrid::
     ; Load in Cell grid to cell grid constant
     ld hl, CELL_GRID_START
     ld de, CellGrid
-    ld b, 36
+    ld bc, 36
     call memCopy
 
     ld hl, CELL_ACCUMULATOR
@@ -42,8 +42,6 @@ loadStartingGrid::
             ld b, [hl]
 
             ; Comparison time
-            ld a, [BITSHIFT_TRACKER]
-            and a, b
             call drawCell
 
             ; Increment Tile Offset
@@ -89,9 +87,25 @@ loadStartingGrid::
     ; End Set Row -----------------------------------
 ret 
 
+; a = bitshift tracker
+; b = value in cell grid
+drawCell::
+  ld a, [BITSHIFT_TRACKER]
+  and a, b
+  ld hl, VRAM_MAP_CHR
+  add hl, de
+  jp nz, .drawLive
+  .drawDead
+  ld [hl], 1
+  jp .drawCellEnd
+  .drawLive
+  ld [hl], 2
+  .drawCellEnd
+ret
+
 SECTION "starting grid storage", ROM0
 CellGrid:
-  db %00000000, %11111111
+  db %11111111, %11111111
   db %11111111, %00000001
   db %00000000, %00000000
   db %00000000, %00000000
@@ -107,4 +121,3 @@ CellGrid:
   db %00000000, %00000000
   db %00000000, %00000000
   db %00000000, %00000000
-
