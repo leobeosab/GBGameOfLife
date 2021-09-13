@@ -52,6 +52,92 @@ loadStartingGrid::
     ld bc, 36
     call memCopy
 
+    ; draw initial grid
+    call drawGrid
+ret 
+
+getNumberOfNeighbors::
+    ; b = row
+    ; c = column
+
+    ; get top left neigbor
+
+ret
+
+getCellState:: 
+    ; b = row
+    ; c = column
+    ; RET = d register contains 1 or 0 based on state
+
+    ; Check if column is out of bounds (ie greater than 15)
+    ld a, b
+    sbc a, ROW_LENGTH
+    jp nc, .deadCell
+
+    ld a, c
+    sbc a, COLUMN_LENGTH
+    jp nc, .deadCell
+
+    ; load hl to cell @ 0,0
+    ld hl, CELL_GRID_START
+
+    ; Add hl up the rows
+    .rowAddition
+    ; Check if we hit zero on rows
+    ld a, 0
+    or a, b
+    ld a, b
+    jp z, .endRow
+
+    ; Add row to hl
+    ld d, 0
+    ld e, 2 ; TODO:// replace this with column length
+    add hl, de
+
+    ; decrease row
+    dec b
+    jp .rowAddition
+    .endRow
+
+    ; Check to see if column is over 15 if it is, add one to hl and subtract 8
+    ld a, c
+    sbc a, 8
+    jp c, .startColumnMath
+    inc hl
+    ld c, a
+
+    .startColumnMath
+    ld b, 128
+
+    .colAddition
+    ; Check if we are at 0 on columns
+    ld a, 0
+    or a, c
+    jp z, .endColumn
+
+    ; add column to h1
+    rr b
+
+    ; decrease column
+    dec c
+    jp .colAddition
+    .endColumn
+
+    ld a, [hl]
+    and a, b
+    jp z, .deadCell
+    
+    .liveCell
+    ld d, 1
+    jp .endGetCellState
+    .deadCell
+    ld d, 0
+    jp .endGetCellState
+
+    .endGetCellState
+ret
+
+drawGrid::
     ld hl, CELL_ACCUMULATOR
     ld [hl], 0 ; Cell Accumulator
 
@@ -127,7 +213,7 @@ loadStartingGrid::
         sub a, 16
         jp nz, .setRow
     ; End Set Row -----------------------------------
-ret 
+ret
 
 ; a = bitshift tracker
 ; b = value in cell grid

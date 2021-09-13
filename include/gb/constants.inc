@@ -38,3 +38,6 @@ ROW_ACCUMULATOR         EQU    $C850
 ROW_HALF                EQU    $C851
 COL_ACCUMULATOR         EQU    $C851
 CELL_GRID_START         EQU    $C900
+
+ROW_LENGTH              EQU    $10
+COLUMN_LENGTH           EQU    $10

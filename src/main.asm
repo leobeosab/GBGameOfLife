@@ -26,6 +26,10 @@ Start:
 call drawWalls
 call loadStartingGrid
 
+ld b, 1
+ld c, 1
+call getCellState
+
 .displayRegisters
     ld a, %11100100
     ld [LCD_BG_PAL], a
